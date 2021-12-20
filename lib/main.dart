@@ -1,3 +1,4 @@
+import 'package:classroom_allocation/rest.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -11,7 +12,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-       
         primarySwatch: Colors.blue,
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
@@ -31,7 +31,11 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
-  void _incrementCounter() {
+  Future<void> _incrementCounter() async {
+    //var a = await Rest.get("students");
+    //print(a);
+    //var b = await Rest.post("registration", {"student": "1", "subject": "3"});
+    //print(b);
     setState(() {
       _counter++;
     });
