@@ -1,3 +1,4 @@
+import 'package:classroom_allocation/helpers/loading_screen.dart';
 import 'package:classroom_allocation/models/subject.dart';
 import 'package:classroom_allocation/endPoints/subject_end_points.dart';
 import 'package:classroom_allocation/view_subject.dart';
@@ -34,18 +35,22 @@ class _AllSubjectsScreenState extends State<AllSubjectsScreen> {
       appBar: AppBar(
         title: Text("AllSubjectsScreen"),
       ),
-      body: ListView(
-        children: allSubjects.map((e) {
-          return ElevatedButton(onPressed: () {
-            Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ViewSubjectScreen(subject: e),
-                  ),
-                );
-          }, child: Text(e.name!));
-        }).toList(),
-      ),
+      body: (allSubjects.isEmpty)
+          ? LoadingScreen.wheel()
+          : ListView(
+              children: allSubjects.map((e) {
+                return ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ViewSubjectScreen(subject: e),
+                        ),
+                      );
+                    },
+                    child: Text(e.name!));
+              }).toList(),
+            ),
     );
   }
 }

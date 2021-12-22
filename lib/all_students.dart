@@ -1,3 +1,4 @@
+import 'package:classroom_allocation/helpers/loading_screen.dart';
 import 'package:classroom_allocation/models/student.dart';
 import 'package:classroom_allocation/endPoints/student_end_points.dart';
 import 'package:classroom_allocation/view_student.dart';
@@ -34,18 +35,22 @@ class _AllStudentsScreenState extends State<AllStudentsScreen> {
       appBar: AppBar(
         title: Text("AllStudentsScreen"),
       ),
-      body: ListView(
-        children: allStudents.map((e) {
-          return ElevatedButton(onPressed: () {
-            Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ViewStudentScreen(student: e),
-                  ),
-                );
-          }, child: Text(e.name!));
-        }).toList(),
-      ),
+      body: (allStudents.isEmpty)
+          ? LoadingScreen.wheel()
+          : ListView(
+              children: allStudents.map((e) {
+                return ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ViewStudentScreen(student: e),
+                        ),
+                      );
+                    },
+                    child: Text(e.name!));
+              }).toList(),
+            ),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:classroom_allocation/endPoints/classroom_end_points.dart';
+import 'package:classroom_allocation/helpers/loading_screen.dart';
 import 'package:classroom_allocation/models/classroom.dart';
 import 'package:classroom_allocation/view_classroom.dart';
 import 'package:flutter/material.dart';
@@ -27,27 +28,29 @@ class _AllClassroomsScreenState extends State<AllClassroomsScreen> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("AllClassroomsScreen"),
       ),
-      body: ListView(
-        children: allClassrooms.map((e) {
-          return ElevatedButton(
-              onPressed: () {
-               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ViewClassRoomScreen(classRoom: e),
-                  ),
-                );
-              },
-              child: Text(e.name!));
-        }).toList(),
-      ),
+      body: (allClassrooms.isEmpty)
+          ? LoadingScreen.wheel()
+          : ListView(
+              children: allClassrooms.map((e) {
+                return ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              ViewClassRoomScreen(classRoom: e),
+                        ),
+                      );
+                    },
+                    child: Text(e.name!));
+              }).toList(),
+            ),
     );
   }
 }
