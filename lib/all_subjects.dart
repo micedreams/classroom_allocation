@@ -1,5 +1,6 @@
 import 'package:classroom_allocation/get_end_points.dart';
 import 'package:classroom_allocation/models/subject.dart';
+import 'package:classroom_allocation/view_subject.dart';
 import 'package:flutter/material.dart';
 
 class AllSubjectsScreen extends StatefulWidget {
@@ -35,7 +36,14 @@ class _AllSubjectsScreenState extends State<AllSubjectsScreen> {
       ),
       body: ListView(
         children: allSubjects.map((e) {
-          return ElevatedButton(onPressed: () {}, child: Text(e.name!));
+          return ElevatedButton(onPressed: () {
+            Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ViewSubjectScreen(subject: e),
+                  ),
+                );
+          }, child: Text(e.name!));
         }).toList(),
       ),
     );

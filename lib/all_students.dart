@@ -1,5 +1,6 @@
 import 'package:classroom_allocation/get_end_points.dart';
 import 'package:classroom_allocation/models/student.dart';
+import 'package:classroom_allocation/view_student.dart';
 import 'package:flutter/material.dart';
 
 class AllStudentsScreen extends StatefulWidget {
@@ -35,7 +36,14 @@ class _AllStudentsScreenState extends State<AllStudentsScreen> {
       ),
       body: ListView(
         children: allStudents.map((e) {
-          return ElevatedButton(onPressed: () {}, child: Text(e.name!));
+          return ElevatedButton(onPressed: () {
+            Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ViewStudentScreen(student: e),
+                  ),
+                );
+          }, child: Text(e.name!));
         }).toList(),
       ),
     );

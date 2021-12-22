@@ -1,5 +1,6 @@
 import 'package:classroom_allocation/get_end_points.dart';
 import 'package:classroom_allocation/models/classroom.dart';
+import 'package:classroom_allocation/view_classroom.dart';
 import 'package:flutter/material.dart';
 
 class AllClassroomsScreen extends StatefulWidget {
@@ -37,7 +38,12 @@ class _AllClassroomsScreenState extends State<AllClassroomsScreen> {
         children: allClassrooms.map((e) {
           return ElevatedButton(
               onPressed: () {
-               
+               Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ViewClassRoomScreen(classRoom: e),
+                  ),
+                );
               },
               child: Text(e.name!));
         }).toList(),
