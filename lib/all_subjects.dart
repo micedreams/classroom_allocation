@@ -1,5 +1,5 @@
-import 'package:classroom_allocation/end_points.dart';
 import 'package:classroom_allocation/models/subject.dart';
+import 'package:classroom_allocation/endPoints/subject_end_points.dart';
 import 'package:classroom_allocation/view_subject.dart';
 import 'package:flutter/material.dart';
 
@@ -21,7 +21,7 @@ class _AllSubjectsScreenState extends State<AllSubjectsScreen> {
   }
 
   getSubjects() async {
-    var allSubjectsList = await EndPoints.getAllSubjects();
+    var allSubjectsList = await SubjectEndPoints.getAllSubjects();
 
     setState(() {
       allSubjects = allSubjectsList;

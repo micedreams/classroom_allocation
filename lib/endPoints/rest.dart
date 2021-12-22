@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'dart:io' show Platform;
 
 class Rest {
   static dynamic get(String path) async {

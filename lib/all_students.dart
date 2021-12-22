@@ -1,5 +1,5 @@
-import 'package:classroom_allocation/end_points.dart';
 import 'package:classroom_allocation/models/student.dart';
+import 'package:classroom_allocation/endPoints/student_end_points.dart';
 import 'package:classroom_allocation/view_student.dart';
 import 'package:flutter/material.dart';
 
@@ -21,7 +21,7 @@ class _AllStudentsScreenState extends State<AllStudentsScreen> {
   }
 
   getStudents() async {
-    var allStudentsList = await EndPoints.getAllStudents();
+    var allStudentsList = await StudentEndPoints.getAllStudents();
 
     setState(() {
       allStudents = allStudentsList;

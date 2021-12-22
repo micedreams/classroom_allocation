@@ -1,4 +1,4 @@
-import 'package:classroom_allocation/end_points.dart';
+import 'package:classroom_allocation/endPoints/classroom_end_points.dart';
 import 'package:classroom_allocation/models/classroom.dart';
 import 'package:flutter/material.dart';
 
@@ -48,7 +48,7 @@ class _ViewClassRoomScreenState extends State<ViewClassRoomScreen> {
                   setState(() {
                     subjectId = value!;
                   });
-                  final response = await EndPoints.assignReAssignSubject(
+                  final response = await ClassroomEndPoints.assignReAssignSubject(
                       classRoom!.id!, subjectId!);
 
                   setState(() {

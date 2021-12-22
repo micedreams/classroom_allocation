@@ -1,7 +1,7 @@
 import 'package:classroom_allocation/all_classrooms.dart';
 import 'package:classroom_allocation/all_students.dart';
 import 'package:classroom_allocation/all_subjects.dart';
-import 'package:classroom_allocation/rest.dart';
+import 'package:classroom_allocation/endPoints/rest.dart';
 import 'package:flutter/material.dart';
 
 class MyHomePage extends StatefulWidget {
