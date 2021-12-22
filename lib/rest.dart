@@ -10,6 +10,19 @@ class Rest {
     return data;
   }
 
+  static dynamic patch(
+    String path,
+    int id,
+    Map<String, dynamic> params,
+  ) async {
+    final response = await http.patch(
+        Uri.parse(
+            'https://hamon-interviewapi.herokuapp.com/$path/$id?api_key=61bd1'),
+        body: params);
+    var data = json.decode(response.body);
+    return data;
+  }
+
   static dynamic post(String path, Map<String, dynamic> params) async {
     final response = await http.post(
         Uri.parse(

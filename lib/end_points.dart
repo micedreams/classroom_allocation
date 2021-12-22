@@ -4,7 +4,7 @@ import 'package:classroom_allocation/models/subject.dart';
 import 'package:classroom_allocation/rest.dart';
 import 'dart:io' show Platform;
 
-class GetEndPoints {
+class EndPoints {
   static dynamic getAllClassrooms() async {
     var response = await Rest.get("classrooms/");
 
@@ -14,6 +14,16 @@ class GetEndPoints {
         .cast<Classroom>();
 
     return allClassroomsList;
+  }
+
+  static dynamic assignReAssignSubject(int classRoomId, int subjectId) async {
+    var params = {"subject": "$subjectId"};
+    var classroom = await Rest.patch(
+      "classrooms",
+      classRoomId,
+      params,
+    );
+    return classroom;
   }
 
   static dynamic getAllSubjects() async {
