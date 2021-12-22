@@ -1,11 +1,47 @@
 import 'package:classroom_allocation/all_classrooms.dart';
 import 'package:classroom_allocation/all_students.dart';
 import 'package:classroom_allocation/all_subjects.dart';
+import 'package:classroom_allocation/endPoints/classroom_end_points.dart';
+import 'package:classroom_allocation/endPoints/student_end_points.dart';
+import 'package:classroom_allocation/endPoints/subject_end_points.dart';
+import 'package:classroom_allocation/helpers/loading_screen.dart';
+import 'package:classroom_allocation/models/classroom.dart';
+import 'package:classroom_allocation/models/student.dart';
+import 'package:classroom_allocation/models/subject.dart';
 import 'package:classroom_allocation/my_home_page.dart';
+import 'package:classroom_allocation/provider_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  List<Student> allStudents = [];
+  List<Subject> allSubjects = [];
+  List<Classroom> allClassrooms = [];
+  await StudentEndPoints.getAllStudents().then((val) {
+    allStudents = val;
+  });
+
+  await SubjectEndPoints.getAllSubjects().then((val) {
+    allSubjects = val;
+  });
+
+  await ClassroomEndPoints.getAllClassrooms().then((val) {
+    allClassrooms = val;
+  });
+
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+            create: (_) =>
+                ProviderProvider(allClassrooms, allStudents, allSubjects))
+      ],
+      child:
+          (allSubjects.isEmpty && allStudents.isEmpty && allClassrooms.isEmpty)
+              ? LoadingScreen.wheel()
+              : const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

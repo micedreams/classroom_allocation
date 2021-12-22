@@ -1,8 +1,9 @@
-import 'package:classroom_allocation/endPoints/classroom_end_points.dart';
 import 'package:classroom_allocation/helpers/loading_screen.dart';
 import 'package:classroom_allocation/models/classroom.dart';
+import 'package:classroom_allocation/provider_provider.dart';
 import 'package:classroom_allocation/view_classroom.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/src/provider.dart';
 
 class AllClassroomsScreen extends StatefulWidget {
   static const routeName = '/AllClassroomsScreen';
@@ -14,22 +15,15 @@ class AllClassroomsScreen extends StatefulWidget {
 }
 
 class _AllClassroomsScreenState extends State<AllClassroomsScreen> {
-  List<Classroom> allClassrooms = [];
   @override
   void initState() {
-    getClassrooms();
     super.initState();
-  }
-
-  void getClassrooms() async {
-    var allClassroomsList = await ClassroomEndPoints.getAllClassrooms();
-    setState(() {
-      allClassrooms = allClassroomsList;
-    });
   }
 
   @override
   Widget build(BuildContext context) {
+    List<Classroom> allClassrooms =
+        context.select((ProviderProvider p) => p.allClassrooms!);
     return Scaffold(
       appBar: AppBar(
         title: Text("AllClassroomsScreen"),
