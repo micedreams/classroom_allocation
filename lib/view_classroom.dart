@@ -15,6 +15,7 @@ class ViewClassRoomScreen extends StatefulWidget {
 
 class _ViewClassRoomScreenState extends State<ViewClassRoomScreen> {
   Classroom? classRoom;
+  int? subjectId;
   @override
   void initState() {
     setState(() {
@@ -35,18 +36,34 @@ class _ViewClassRoomScreenState extends State<ViewClassRoomScreen> {
           Text("Name:${classRoom!.name!}"),
           Text("layout:${classRoom!.layout!}"),
           Text("size:${classRoom!.size!}"),
-          Text("subject:${classRoom!.subject}"),
-          ElevatedButton(
-              onPressed: () async {
-                final response =
-                    await EndPoints.assignReAssignSubject(classRoom!.id!, 1);
-                 setState(() {
-                  classRoom = Classroom.fromJson(response);
-                });
-              },
-              child: Text(classRoom!.subject == null
-                  ? "Assign Subject"
-                  : "ReAssign Subject"))
+          Row(
+            children: [
+              Text("Subject: "),
+              DropdownButton<int>(
+                hint: Text(classRoom!.subject == null
+                    ? "Assign Subject"
+                    : "ReAssign Subject"),
+                value: classRoom!.subject,
+                onChanged: (int? value) async {
+                  setState(() {
+                    subjectId = value!;
+                  });
+                  final response = await EndPoints.assignReAssignSubject(
+                      classRoom!.id!, subjectId!);
+
+                  setState(() {
+                    classRoom = Classroom.fromJson(response);
+                  });
+                },
+                items: <int>[1, 2, 3, 4, 5, 6].map((int value) {
+                  return DropdownMenuItem<int>(
+                    value: value,
+                    child: Text(value.toString()),
+                  );
+                }).toList(),
+              ),
+            ],
+          ),
         ],
       ),
     );
