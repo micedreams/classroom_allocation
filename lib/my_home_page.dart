@@ -1,3 +1,6 @@
+import 'package:classroom_allocation/all_classrooms.dart';
+import 'package:classroom_allocation/all_students.dart';
+import 'package:classroom_allocation/all_subjects.dart';
 import 'package:classroom_allocation/rest.dart';
 import 'package:flutter/material.dart';
 
@@ -20,7 +23,24 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[],
+          children: <Widget>[
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context)
+                      .pushNamed(AllClassroomsScreen.routeName);
+                },
+                child: const Text("all  Classes ")),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamed(AllSubjectsScreen.routeName);
+                },
+                child: const Text("all Subjects")),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamed(AllStudentsScreen.routeName);
+                },
+                child: const Text("all Students")),
+          ],
         ),
       ),
     );

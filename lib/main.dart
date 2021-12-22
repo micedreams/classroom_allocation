@@ -1,3 +1,6 @@
+import 'package:classroom_allocation/all_classrooms.dart';
+import 'package:classroom_allocation/all_students.dart';
+import 'package:classroom_allocation/all_subjects.dart';
 import 'package:classroom_allocation/my_home_page.dart';
 import 'package:flutter/material.dart';
 
@@ -10,11 +13,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Class Allocation',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: ''),
+      routes: {
+        AllClassroomsScreen.routeName: (context) => const AllClassroomsScreen(),
+        AllSubjectsScreen.routeName: (context) => const AllSubjectsScreen(),
+        AllStudentsScreen.routeName: (context) => const AllStudentsScreen(),
+      },
+      home: const MyHomePage(title: 'Class Allocation'),
     );
   }
 }
