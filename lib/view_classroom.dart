@@ -94,8 +94,16 @@ class _ViewClassRoomScreenState extends State<ViewClassRoomScreen> {
                 ElevatedButton(
                   onPressed: () async {
                     final response =
-                        await RegistrationEndPoints.makeRegistration(1,1);
-                     print(response);
+                        await RegistrationEndPoints.deleteRegistration(565);
+                    print(response);
+                  },
+                  child: Text("delete 1  Registrations"),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    final response =
+                        await RegistrationEndPoints.makeRegistration(1, 1);
+                    print(response);
                   },
                   child: Text("make Registrations"),
                 ),

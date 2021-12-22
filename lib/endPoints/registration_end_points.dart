@@ -23,4 +23,10 @@ class RegistrationEndPoints {
         "registration/", {"student": "$studentId", "subject": "$subjectId"});
     return registration;
   }
+
+  static dynamic deleteRegistration(registrationId) async {
+    var response = await Rest.delete("registration/$registrationId");
+    final registration = Registration.fromJson(response);
+    return registration;
+  }
 }

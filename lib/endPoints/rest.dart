@@ -30,4 +30,11 @@ class Rest {
     var data = json.decode(response.body);
     return data;
   }
+
+  static dynamic delete(String path) async {
+    final response = await http.delete(Uri.parse(
+        'https://hamon-interviewapi.herokuapp.com/$path?api_key=61bd1'));
+    var data = json.decode(response.body);
+    return data;
+  }
 }
