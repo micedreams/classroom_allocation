@@ -1,4 +1,5 @@
 import 'package:classroom_allocation/endPoints/classroom_end_points.dart';
+import 'package:classroom_allocation/endPoints/registration_end_points.dart';
 import 'package:classroom_allocation/helpers/loading_screen.dart';
 import 'package:classroom_allocation/models/classroom.dart';
 import 'package:classroom_allocation/models/student.dart';
@@ -73,6 +74,30 @@ class _ViewClassRoomScreenState extends State<ViewClassRoomScreen> {
                       }).toList(),
                     ),
                   ],
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    final response =
+                        await RegistrationEndPoints.getAllRegistrations();
+                    print(response);
+                  },
+                  child: Text("Get all  Registrations"),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    final response =
+                        await RegistrationEndPoints.getRegistration(565);
+                    print(response);
+                  },
+                  child: Text("Get 1  Registrations"),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    final response =
+                        await RegistrationEndPoints.makeRegistration(1,1);
+                     print(response);
+                  },
+                  child: Text("make Registrations"),
                 ),
                 Card(
                     color: Colors.blue.shade200,

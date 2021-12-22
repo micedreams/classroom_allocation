@@ -14,7 +14,8 @@ class StudentEndPoints {
   }
 
   static dynamic getStudent(studentId) async {
-    final student = await Rest.get("students/$studentId");
+    var response = await Rest.get("students/$studentId");
+    final student = Student.fromJson(response);
     return student;
   }
 }

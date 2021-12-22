@@ -14,7 +14,8 @@ class SubjectEndPoints {
   }
 
   static dynamic getSubject(subjectId) async {
-    final subject = await Rest.get("subjects/$subjectId");
+    var response = await Rest.get("subjects/$subjectId");
+    final subject = Subject.fromJson(response);
     return subject;
   }
 }

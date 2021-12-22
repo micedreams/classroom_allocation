@@ -14,17 +14,14 @@ class ClassroomEndPoints {
   }
 
   static dynamic getClassroom(classRoomId) async {
-    final classroom = await Rest.get("classrooms/$classRoomId");
+    var response = await Rest.get("classrooms/$classRoomId");
+    final classroom = Classroom.fromJson(response);
     return classroom;
   }
 
   static dynamic assignReAssignSubject(int classRoomId, int subjectId) async {
     var params = {"subject": "$subjectId"};
-    var classroom = await Rest.patch(
-      "classrooms",
-      classRoomId,
-      params,
-    );
+    var classroom = await Rest.patch("classrooms/$classRoomId", params);
     return classroom;
   }
 }
