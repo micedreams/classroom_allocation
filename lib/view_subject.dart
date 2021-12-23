@@ -1,3 +1,4 @@
+import 'package:classroom_allocation/helpers/NewScaffold.dart';
 import 'package:classroom_allocation/models/subject.dart';
 import 'package:flutter/material.dart';
 
@@ -14,15 +15,13 @@ class ViewSubjectScreen extends StatefulWidget {
 class _ViewSubjectScreenState extends State<ViewSubjectScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(""),
-      ),
+    return NewScaffold(
+      title: widget.subject.name!,
       body: ListView(
         children: [
-          Text("Name:${widget.subject.name!}"),
           Text("teacher:${widget.subject.teacher!}"),
-          Text("credit:${widget.subject.credits == null? 0: widget.subject.credits.toString()}"),
+          Text(
+              "credit:${widget.subject.credits == null ? 0 : widget.subject.credits.toString()}"),
         ],
       ),
     );

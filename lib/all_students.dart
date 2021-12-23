@@ -1,3 +1,4 @@
+import 'package:classroom_allocation/helpers/NewScaffold.dart';
 import 'package:classroom_allocation/helpers/loading_screen.dart';
 import 'package:classroom_allocation/models/student.dart';
 import 'package:classroom_allocation/provider_provider.dart';
@@ -19,10 +20,8 @@ class _AllStudentsScreenState extends State<AllStudentsScreen> {
   Widget build(BuildContext context) {
     List<Student> allStudents =
         context.select((ProviderProvider p) => p.allStudents!);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("AllStudentsScreen"),
-      ),
+    return NewScaffold(
+      title: "AllStudentsScreen",
       body: (allStudents.isEmpty)
           ? LoadingScreen.wheel()
           : ListView(

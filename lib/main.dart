@@ -10,7 +10,6 @@ import 'package:classroom_allocation/models/classroom.dart';
 import 'package:classroom_allocation/models/registration.dart';
 import 'package:classroom_allocation/models/student.dart';
 import 'package:classroom_allocation/models/subject.dart';
-import 'package:classroom_allocation/my_home_page.dart';
 import 'package:classroom_allocation/provider_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -65,7 +64,7 @@ class MyApp extends StatelessWidget {
         AllSubjectsScreen.routeName: (context) => const AllSubjectsScreen(),
         AllStudentsScreen.routeName: (context) => const AllStudentsScreen(),
       },
-      home: const MyHomePage(title: 'Class Allocation'),
+      home: const AllClassroomsScreen(),
     );
   }
 }

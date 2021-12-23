@@ -1,3 +1,4 @@
+import 'package:classroom_allocation/helpers/NewScaffold.dart';
 import 'package:classroom_allocation/endPoints/classroom_end_points.dart';
 import 'package:classroom_allocation/endPoints/registration_end_points.dart';
 import 'package:classroom_allocation/helpers/loading_screen.dart';
@@ -47,10 +48,8 @@ class _ViewClassRoomScreenState extends State<ViewClassRoomScreen> {
     allRegistration =
         context.select((ProviderProvider p) => p.allRegistration!);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(classRoom!.name!),
-      ),
+    return NewScaffold(
+      title: classRoom!.name!,
       body: ((allSubjects.isEmpty && allStudents.isEmpty) || loadingScreen)
           ? LoadingScreen.wheel()
           : ListView(
