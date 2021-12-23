@@ -1,4 +1,5 @@
 import 'package:classroom_allocation/endPoints/classroom_end_points.dart';
+import 'package:classroom_allocation/endPoints/registration_end_points.dart';
 import 'package:classroom_allocation/helpers/loading_screen.dart';
 import 'package:classroom_allocation/models/classroom.dart';
 import 'package:classroom_allocation/models/registration.dart';
@@ -30,7 +31,7 @@ class _ViewClassRoomScreenState extends State<ViewClassRoomScreen> {
   Classroom? classRoom;
   int? subjectId;
   String? teacherName;
-  String? _selectedId;
+  String? removeRegistrationId;
   @override
   void initState() {
     setState(() {
@@ -55,6 +56,16 @@ class _ViewClassRoomScreenState extends State<ViewClassRoomScreen> {
           : ListView(
               shrinkWrap: true,
               children: [
+                ElevatedButton(
+                  onPressed: () async {
+                    await RegistrationEndPoints.makeRegistration(1, 1);
+                    await RegistrationEndPoints.makeRegistration(2, 1);
+                    await RegistrationEndPoints.makeRegistration(3, 1);
+                    await RegistrationEndPoints.makeRegistration(4, 1);
+                    await RegistrationEndPoints.makeRegistration(5, 1);
+                  },
+                  child: Text("test button"),
+                ),
                 Row(
                   children: [
                     const Text("Subject: "),
@@ -65,6 +76,7 @@ class _ViewClassRoomScreenState extends State<ViewClassRoomScreen> {
                       value: classRoom!.subject,
                       onChanged: (int? value) async {
                         setState(() {
+                          removeRegistrationId = null;
                           loadingScreen = true;
                           subjectId = value!;
                         });
@@ -89,12 +101,45 @@ class _ViewClassRoomScreenState extends State<ViewClassRoomScreen> {
                 ),
                 classRoom!.subject == null &&
                         registrationsWithMySubjectID.length < classRoom!.size!
-                    ? SizedBox.shrink()
-                    : Text("Here goes the add student box"),
+                    ? const SizedBox.shrink()
+                    : const Text("Here goes the add student box"),
                 classRoom!.subject == null ||
                         registrationsWithMySubjectID.isEmpty
-                    ? SizedBox.shrink()
-                    : Text("Here goes the remove student box"),
+                    ? const SizedBox.shrink()
+                    : DropdownButton(
+                        hint: const Text("Remove Student"),
+                        value: removeRegistrationId,
+                        onChanged: (String? value) async {
+                          setState(() {
+                            loadingScreen = true;
+                            removeRegistrationId = value!;
+                          });
+
+                          await RegistrationEndPoints.deleteRegistration(
+                              removeRegistrationId!);
+                          await RegistrationEndPoints.getAllRegistrations()
+                              .then((val) {
+                            setState(() {
+                              allRegistration = val;
+                            });
+                            Provider.of<ProviderProvider>(context,
+                                    listen: false)
+                                .updateRegistration(val);
+                          });
+                          getRegistrationsForSubjectId(subjectId!);
+
+                          setState(() {
+                            loadingScreen = false;
+                            removeRegistrationId = null;
+                          });
+                        },
+                        items: registrationsWithMySubjectID.map((value) {
+                          return DropdownMenuItem<String>(
+                            value: "${value.id}",
+                            child: Text("${allStudents[value.student!].name}"),
+                          );
+                        }).toList(),
+                      ),
                 Column(
                   children: [
                     Card(
@@ -140,7 +185,7 @@ class _ViewClassRoomScreenState extends State<ViewClassRoomScreen> {
     );
   }
 
-  // registrations for selected student id
+  // registrations for selected subject id
   void getRegistrationsForSubjectId(int subjectId) {
     registrationsWithMySubjectID =
         allRegistration.where((x) => x.subject == subjectId).toList();
