@@ -18,10 +18,37 @@ class _ViewSubjectScreenState extends State<ViewSubjectScreen> {
     return NewScaffold(
       title: widget.subject.name!,
       body: ListView(
+        padding: const EdgeInsets.all(8.0),
         children: [
-          Text("teacher:${widget.subject.teacher!}"),
-          Text(
-              "credit:${widget.subject.credits == null ? 0 : widget.subject.credits.toString()}"),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                const Text(
+                  "teacher: ",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(widget.subject.teacher!),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                const Text(
+                  "credit: ",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                    "${widget.subject.credits == null ? 0 : widget.subject.credits.toString()}"),
+              ],
+            ),
+          ),
         ],
       ),
     );

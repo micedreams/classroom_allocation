@@ -19,9 +19,36 @@ class _ViewStudentScreenState extends State<ViewStudentScreen> {
     return NewScaffold(
       title: widget.student.name!,
       body: ListView(
+        padding: const EdgeInsets.all(8.0),
         children: [
-          Text("Age:${widget.student.age.toString()}"),
-          Text("Email:${widget.student.email!}"),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                const Text(
+                  "Age: ",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(widget.student.age.toString()),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                const Text(
+                  "Email: ",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(widget.student.email!),
+              ],
+            ),
+          ),
         ],
       ),
     );
