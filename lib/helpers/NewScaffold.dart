@@ -12,33 +12,24 @@ class NewScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<String> buttonsList = [
+      "AllSubjectsScreen",
+      "AllClassroomsScreen",
+      "AllStudentsScreen"
+    ];
     return Scaffold(
-      bottomNavigationBar: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          title == "AllSubjectsScreen"
+      bottomNavigationBar: ButtonBar(
+          children: buttonsList.map(
+        (e) {
+          return title == e
               ? const SizedBox.shrink()
               : ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).pushNamed("/AllSubjectsScreen");
+                    Navigator.of(context).pushReplacementNamed("/$e");
                   },
-                  child: const Text("all Subjects")),
-          title == "AllClassroomsScreen"
-              ? const SizedBox.shrink()
-              : ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pushNamed("/AllClassroomsScreen");
-                  },
-                  child: const Text("all  Classes ")),
-          title == "AllStudentsScreen"
-              ? const SizedBox.shrink()
-              : ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pushNamed("/AllStudentsScreen");
-                  },
-                  child: const Text("all Students")),
-        ],
-      ),
+                  child: Text(e));
+        },
+      ).toList()),
       appBar: AppBar(
         title: Text(title),
       ),
