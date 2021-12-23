@@ -25,29 +25,6 @@ class ProviderProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void updateStudent(
-    List<Student> updatedStudents,
-  ) {
-    allStudents = updatedStudents;
-
-    notifyListeners();
-  }
-
-  void updateClassroom(
-    List<Classroom> updatedClassrooms,
-  ) {
-    allClassrooms = updatedClassrooms;
-
-    notifyListeners();
-  }
-
-  void updateSubject(
-    List<Subject> updatedSubjects,
-  ) {
-    allSubjects = updatedSubjects;
-    notifyListeners();
-  }
-
   void updateRegistration(List<Registration> updatedRegistrations) {
     allRegistration = updatedRegistrations;
     notifyListeners();

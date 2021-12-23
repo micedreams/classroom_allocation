@@ -33,6 +33,7 @@ class _ViewClassRoomScreenState extends State<ViewClassRoomScreen> {
   int? subjectId;
   String? teacherName;
   String? removeRegistrationId;
+  String? addStudentId;
   @override
   void initState() {
     setState(() {
@@ -55,16 +56,6 @@ class _ViewClassRoomScreenState extends State<ViewClassRoomScreen> {
           : ListView(
               shrinkWrap: true,
               children: [
-                ElevatedButton(
-                  onPressed: () async {
-                    await RegistrationEndPoints.makeRegistration(1, 1);
-                    await RegistrationEndPoints.makeRegistration(2, 1);
-                    await RegistrationEndPoints.makeRegistration(3, 1);
-                    await RegistrationEndPoints.makeRegistration(4, 1);
-                    await RegistrationEndPoints.makeRegistration(5, 1);
-                  },
-                  child: Text("test button"),
-                ),
                 Row(
                   children: [
                     const Text("Subject: "),
@@ -98,10 +89,44 @@ class _ViewClassRoomScreenState extends State<ViewClassRoomScreen> {
                     ),
                   ],
                 ),
-                classRoom!.subject == null &&
-                        registrationsWithMySubjectID.length < classRoom!.size!
+                classRoom!.subject == null ||
+                        registrationsWithMySubjectID.length >= classRoom!.size!
                     ? const SizedBox.shrink()
-                    : const Text("Here goes the add student box"),
+                    : DropdownButton<String>(
+                        hint: const Text("Add Student"),
+                        value: addStudentId,
+                        onChanged: (String? value) async {
+                          setState(() {
+                            loadingScreen = true;
+                            addStudentId = value!;
+                          });
+
+                          await RegistrationEndPoints.makeRegistration(
+                              addStudentId, subjectId);
+
+                          await RegistrationEndPoints.getAllRegistrations()
+                              .then((val) {
+                            setState(() {
+                              allRegistration = val;
+                            });
+                            Provider.of<ProviderProvider>(context,
+                                    listen: false)
+                                .updateRegistration(val);
+                          });
+                          getRegistrationsForSubjectId(subjectId!);
+
+                          setState(() {
+                            loadingScreen = false;
+                            addStudentId = null;
+                          });
+                        },
+                        items: allStudents.map((value) {
+                          return DropdownMenuItem<String>(
+                            value: "${value.id}",
+                            child: Text("${value.name}"),
+                          );
+                        }).toList(),
+                      ),
                 classRoom!.subject == null ||
                         registrationsWithMySubjectID.isEmpty
                     ? const SizedBox.shrink()
@@ -135,7 +160,8 @@ class _ViewClassRoomScreenState extends State<ViewClassRoomScreen> {
                         items: registrationsWithMySubjectID.map((value) {
                           return DropdownMenuItem<String>(
                             value: "${value.id}",
-                            child: Text("${allStudents[value.student!].name}"),
+                            child:
+                                Text("${allStudents[value.student! - 1].name}"),
                           );
                         }).toList(),
                       ),
@@ -164,7 +190,8 @@ class _ViewClassRoomScreenState extends State<ViewClassRoomScreen> {
                       shrinkWrap: true,
                       crossAxisCount:
                           classRoom!.layout! == "conference" ? 2 : 4,
-                      children: List.generate(classRoom!.size!, (index) {
+                      children: List.generate(
+                          registrationsWithMySubjectID.length, (index) {
                         return Card(
                             color: Colors.blue.shade200,
                             shape: RoundedRectangleBorder(
@@ -173,7 +200,8 @@ class _ViewClassRoomScreenState extends State<ViewClassRoomScreen> {
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Center(
-                              child: Text("${index + 1}."),
+                              child: Text(
+                                  "${allStudents[registrationsWithMySubjectID[index].student! - 1].name}"),
                             ));
                       }),
                     ),
