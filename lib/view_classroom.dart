@@ -1,7 +1,7 @@
 import 'package:classroom_allocation/endPoints/classroom_end_points.dart';
-import 'package:classroom_allocation/endPoints/registration_end_points.dart';
 import 'package:classroom_allocation/helpers/loading_screen.dart';
 import 'package:classroom_allocation/models/classroom.dart';
+import 'package:classroom_allocation/models/registration.dart';
 import 'package:classroom_allocation/models/student.dart';
 import 'package:classroom_allocation/models/subject.dart';
 import 'package:classroom_allocation/provider_provider.dart';
@@ -20,9 +20,17 @@ class ViewClassRoomScreen extends StatefulWidget {
 }
 
 class _ViewClassRoomScreenState extends State<ViewClassRoomScreen> {
+  List<Student> allStudents = [];
+  List<Subject> allSubjects = [];
+  List<Registration> allRegistration = [];
+  List<Registration> registrationsWithMySubjectID = [];
+  List<Student> studentsWithRegistrationsForMySubjectID = [];
+  bool loadingScreen = false;
+
   Classroom? classRoom;
   int? subjectId;
   String? teacherName;
+  String? _selectedId;
   @override
   void initState() {
     setState(() {
@@ -33,15 +41,16 @@ class _ViewClassRoomScreenState extends State<ViewClassRoomScreen> {
 
   @override
   Widget build(BuildContext context) {
-    List<Student> allStudents =
-        context.select((ProviderProvider p) => p.allStudents!);
-    List<Subject> allSubjects =
-        context.select((ProviderProvider p) => p.allSubjects!);
+    allStudents = context.select((ProviderProvider p) => p.allStudents!);
+    allSubjects = context.select((ProviderProvider p) => p.allSubjects!);
+    allRegistration =
+        context.select((ProviderProvider p) => p.allRegistration!);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(classRoom!.name!),
       ),
-      body: (allSubjects.isEmpty && allStudents.isEmpty)
+      body: ((allSubjects.isEmpty && allStudents.isEmpty) || loadingScreen)
           ? LoadingScreen.wheel()
           : ListView(
               shrinkWrap: true,
@@ -56,14 +65,17 @@ class _ViewClassRoomScreenState extends State<ViewClassRoomScreen> {
                       value: classRoom!.subject,
                       onChanged: (int? value) async {
                         setState(() {
+                          loadingScreen = true;
                           subjectId = value!;
                         });
+                        getRegistrationsForSubjectId(subjectId!);
                         final response =
                             await ClassroomEndPoints.assignReAssignSubject(
                                 classRoom!.id!, subjectId!);
                         setState(() {
                           classRoom = Classroom.fromJson(response);
                           teacherName = allSubjects[value! - 1].teacher;
+                          loadingScreen = false;
                         });
                       },
                       items: allSubjects.map((value) {
@@ -75,59 +87,17 @@ class _ViewClassRoomScreenState extends State<ViewClassRoomScreen> {
                     ),
                   ],
                 ),
-                ElevatedButton(
-                  onPressed: () async {
-                    final response =
-                        await RegistrationEndPoints.getAllRegistrations();
-                    print(response);
-                  },
-                  child: Text("Get all  Registrations"),
-                ),
-                ElevatedButton(
-                  onPressed: () async {
-                    final response =
-                        await RegistrationEndPoints.getRegistration(565);
-                    print(response);
-                  },
-                  child: Text("Get 1  Registrations"),
-                ),
-                ElevatedButton(
-                  onPressed: () async {
-                    final response =
-                        await RegistrationEndPoints.deleteRegistration(565);
-                    print(response);
-                  },
-                  child: Text("delete 1  Registrations"),
-                ),
-                ElevatedButton(
-                  onPressed: () async {
-                    final response =
-                        await RegistrationEndPoints.makeRegistration(1, 1);
-                    print(response);
-                  },
-                  child: Text("make Registrations"),
-                ),
-                Card(
-                    color: Colors.blue.shade200,
-                    shape: RoundedRectangleBorder(
-                      side: const BorderSide(color: Colors.white70, width: 1),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(teacherName != null ? teacherName! : "hi"),
-                      ),
-                    )),
-                GridView.count(
-                  physics: const NeverScrollableScrollPhysics(),
-                  crossAxisSpacing:
-                      classRoom!.layout! == "conference" ? 100 : 0,
-                  childAspectRatio: classRoom!.layout! == "conference" ? 3 : 1,
-                  shrinkWrap: true,
-                  crossAxisCount: classRoom!.layout! == "conference" ? 2 : 4,
-                  children: List.generate(classRoom!.size!, (index) {
-                    return Card(
+                classRoom!.subject == null &&
+                        registrationsWithMySubjectID.length < classRoom!.size!
+                    ? SizedBox.shrink()
+                    : Text("Here goes the add student box"),
+                classRoom!.subject == null ||
+                        registrationsWithMySubjectID.isEmpty
+                    ? SizedBox.shrink()
+                    : Text("Here goes the remove student box"),
+                Column(
+                  children: [
+                    Card(
                         color: Colors.blue.shade200,
                         shape: RoundedRectangleBorder(
                           side:
@@ -135,12 +105,44 @@ class _ViewClassRoomScreenState extends State<ViewClassRoomScreen> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Center(
-                          child: Text("${index + 1}."),
-                        ));
-                  }),
-                ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child:
+                                Text(teacherName != null ? teacherName! : "hi"),
+                          ),
+                        )),
+                    GridView.count(
+                      physics: const NeverScrollableScrollPhysics(),
+                      crossAxisSpacing:
+                          classRoom!.layout! == "conference" ? 100 : 0,
+                      childAspectRatio:
+                          classRoom!.layout! == "conference" ? 3 : 1,
+                      shrinkWrap: true,
+                      crossAxisCount:
+                          classRoom!.layout! == "conference" ? 2 : 4,
+                      children: List.generate(classRoom!.size!, (index) {
+                        return Card(
+                            color: Colors.blue.shade200,
+                            shape: RoundedRectangleBorder(
+                              side: const BorderSide(
+                                  color: Colors.white70, width: 1),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Center(
+                              child: Text("${index + 1}."),
+                            ));
+                      }),
+                    ),
+                  ],
+                )
               ],
             ),
     );
+  }
+
+  // registrations for selected student id
+  void getRegistrationsForSubjectId(int subjectId) {
+    registrationsWithMySubjectID =
+        allRegistration.where((x) => x.subject == subjectId).toList();
   }
 }

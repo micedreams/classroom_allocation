@@ -2,10 +2,12 @@ import 'package:classroom_allocation/all_classrooms.dart';
 import 'package:classroom_allocation/all_students.dart';
 import 'package:classroom_allocation/all_subjects.dart';
 import 'package:classroom_allocation/endPoints/classroom_end_points.dart';
+import 'package:classroom_allocation/endPoints/registration_end_points.dart';
 import 'package:classroom_allocation/endPoints/student_end_points.dart';
 import 'package:classroom_allocation/endPoints/subject_end_points.dart';
 import 'package:classroom_allocation/helpers/loading_screen.dart';
 import 'package:classroom_allocation/models/classroom.dart';
+import 'package:classroom_allocation/models/registration.dart';
 import 'package:classroom_allocation/models/student.dart';
 import 'package:classroom_allocation/models/subject.dart';
 import 'package:classroom_allocation/my_home_page.dart';
@@ -17,6 +19,7 @@ Future<void> main() async {
   List<Student> allStudents = [];
   List<Subject> allSubjects = [];
   List<Classroom> allClassrooms = [];
+  List<Registration> allRegistration = [];
   await StudentEndPoints.getAllStudents().then((val) {
     allStudents = val;
   });
@@ -29,12 +32,16 @@ Future<void> main() async {
     allClassrooms = val;
   });
 
+  await RegistrationEndPoints.getAllRegistrations().then((val) {
+    allRegistration = val;
+  });
+
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
-            create: (_) =>
-                ProviderProvider(allClassrooms, allStudents, allSubjects))
+            create: (_) => ProviderProvider(
+                allClassrooms, allStudents, allSubjects, allRegistration))
       ],
       child:
           (allSubjects.isEmpty && allStudents.isEmpty && allClassrooms.isEmpty)
