@@ -8,6 +8,7 @@ import 'package:classroom_allocation/models/registration.dart';
 import 'package:classroom_allocation/models/student.dart';
 import 'package:classroom_allocation/models/subject.dart';
 import 'package:classroom_allocation/provider_provider.dart';
+import 'package:classroom_allocation/view_student.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
 
@@ -210,9 +211,23 @@ class _ViewClassRoomScreenState extends State<ViewClassRoomScreen> {
                                   color: Colors.white70, width: 1),
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            child: Center(
-                              child: Text(
-                                  "${allStudents[registrationsWithMySubjectID[index].student! - 1].name}"),
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ViewStudentScreen(
+                                        student: allStudents[
+                                            registrationsWithMySubjectID[index]
+                                                    .student! -
+                                                1]),
+                                  ),
+                                );
+                              },
+                              child: Center(
+                                child: Text(
+                                    "${allStudents[registrationsWithMySubjectID[index].student! - 1].name}"),
+                              ),
                             ));
                       }),
                     ),
