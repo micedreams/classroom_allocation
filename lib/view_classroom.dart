@@ -1,6 +1,7 @@
 import 'package:classroom_allocation/helpers/NewScaffold.dart';
 import 'package:classroom_allocation/endPoints/classroom_end_points.dart';
 import 'package:classroom_allocation/endPoints/registration_end_points.dart';
+import 'package:classroom_allocation/helpers/alert.dart';
 import 'package:classroom_allocation/helpers/loading_screen.dart';
 import 'package:classroom_allocation/models/classroom.dart';
 import 'package:classroom_allocation/models/registration.dart';
@@ -71,14 +72,24 @@ class _ViewClassRoomScreenState extends State<ViewClassRoomScreen> {
                           subjectId = value!;
                         });
                         getRegistrationsForSubjectId(subjectId!);
-                        final response =
-                            await ClassroomEndPoints.assignReAssignSubject(
-                                classRoom!.id!, subjectId!);
-                        setState(() {
-                          classRoom = Classroom.fromJson(response);
-                          teacherName = allSubjects[value! - 1].teacher;
-                          loadingScreen = false;
-                        });
+                        if (registrationsWithMySubjectID.length >=
+                            classRoom!.size!) {
+                          setState(() {
+                            subjectId = null;
+                            registrationsWithMySubjectID = [];
+                            loadingScreen = false;
+                          });
+                          Alert.alert("Too many registrations", context);
+                        } else {
+                          final response =
+                              await ClassroomEndPoints.assignReAssignSubject(
+                                  classRoom!.id!, subjectId!);
+                          setState(() {
+                            classRoom = Classroom.fromJson(response);
+                            teacherName = allSubjects[value! - 1].teacher;
+                            loadingScreen = false;
+                          });
+                        }
                       },
                       items: allSubjects.map((value) {
                         return DropdownMenuItem<int>(
